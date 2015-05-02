@@ -4,7 +4,7 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :profiles {:dev {:dependencies [[org.clojure/clojure "1.6.0"]
-                                  [org.clojure/clojurescript "0.0-2665"]
+                                  [org.clojure/clojurescript "0.0-2760"]
                                   [org.clojure/tools.nrepl "0.2.5"]
                                   [org.clojure/math.combinatorics "0.0.9"]]
                  :plugins [[com.keminglabs/cljx "0.6.0" :exclusions [org.clojure/clojure]]
@@ -24,7 +24,7 @@
                                   :output-path "target/generated/test/cljs"
                                   :rules :cljs}]}}
            :1.5 {:dependencies [[org.clojure/clojure "1.5.1"]]}
-           :1.7 {:dependencies [[org.clojure/clojure "1.7.0-alpha5"]]}}
+           :1.7 {:dependencies [[org.clojure/clojure "1.7.0-beta2"] [org.clojure/clojurescript "0.0-3211"]]}}
 
   :aliases {"all" ["with-profile" "dev:dev,1.5:dev,1.7"]
             "deploy" ["do" "clean," "cljx" "once," "deploy" "clojars"]

@@ -101,8 +101,12 @@
   ))
 
 (defn lazy? [coll]
-  (or (instance? clojure.lang.LazySeq coll)
-      (and (instance? clojure.lang.Cons coll)
+  (or (instance? #+clj clojure.lang.LazySeq
+                 #+cljs cljs.core.LazySeq
+                 coll)
+      (and (instance? #+clj clojure.lang.Cons
+                      #+cljs cljs.core.Cons
+                      coll)
            (lazy? (rest coll)))))
 
 (deftest test-laziness
