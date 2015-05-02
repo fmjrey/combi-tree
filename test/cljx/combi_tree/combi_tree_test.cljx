@@ -1,5 +1,6 @@
 (ns combi-tree.combi-tree-test
   (:require [combi-tree.combi-tree :refer [combinations
+                                           combinations-tree
                                            distinct-combinations
                                            unique-combinations]]
             #+clj [clojure.math.combinatorics :as combi]
@@ -97,12 +98,11 @@
                                 '(((:k) (:k)) ((:s) (:k)) ((:s) (:s)))
   ))
 
+(defn lazy? [coll]
+  (or (instance? clojure.lang.LazySeq coll)
+      (and (instance? clojure.lang.Cons coll)
+           (lazy? (rest coll)))))
+
 (deftest test-laziness
-  (let [effects (ref 0)
-        sidefn (fn [x] (do
-                         (dosync (alter effects inc))
-                         x))
-        n 40]
-    (combi/combinations (map sidefn (range n)) (int (/ n 4)))
-    (is (< @effects n) "No laziness.")
-    ))
+  (is (lazy? (combinations (range 12) 3)) "combinations fn should be lazy")
+  (is (lazy? (combinations-tree (range 12) 3)) "combinations-tree fn should be lazy"))

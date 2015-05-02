@@ -13,15 +13,17 @@
   An optional meta data map can be passed to be added as well."
   ([obj]
     (when obj
-      (let [l #+clj obj #+cljs (if (instance? IndexedSeq obj) ; IndexedSeq has
-                                 (apply list obj) ; no meta-data in cljs
-                                 obj)]
+      (let [l #+clj obj
+              #+cljs (if (instance? IndexedSeq obj)
+                       (lazy-seq obj) ; IndexedSeq has no meta-data in cljs
+                       obj)]
         (with-meta l {::tree true}))))
   ([obj m]
     (when obj
-      (let [l #+clj obj #+cljs (if (instance? IndexedSeq obj) ; IndexedSeq has
-                                 (apply list obj) ; no meta-data in cljs
-                                 obj)]
+      (let [l #+clj obj
+              #+cljs (if (instance? IndexedSeq obj)
+                       (lazy-seq obj) ; IndexedSeq has no meta-data in cljs
+                       obj)]
         (with-meta l (assoc m ::tree true))))))
 
 (defn tree-seq?
@@ -32,7 +34,7 @@
 (def empty-tree-list (with-tree-meta ()))
 (defn tree-list
   "Creates a list with a marker meta-data and containing the given elements.
-  Used in combinations trees to distinguishing sequences that are part of the
+  Used in combination trees to distinguish sequences that are part of the
   tree structure from sequences that are node values."
   [& elements]
   (if elements
@@ -41,26 +43,24 @@
 
 (defn tree-cons
   "Creates a cons with a marker meta-data and containing the given elements.
-  Used in combinations trees to distinguishing sequences that are part of the
+  Used in combination trees to distinguish sequences that are part of the
   tree structure from sequences that are node values."
   [x seq]
   (with-tree-meta (cons x seq)))
 
 (defn tree-rest
   "Returns the rest of the given coll with a marker meta-data.
-  Used in combinations trees to distinguishing sequences that are part of the
+  Used in combination trees to distinguish sequences that are part of the
   tree structure from sequences that are node values."
   [coll]
-  (if-let [n (next coll)]
-    (with-tree-meta n)
-    empty-tree-list))
+  (with-tree-meta (rest coll)))
 
 (def zero-combinations-tree
   (sorted-map 0 empty-tree-list))
 
 (defn tree-conj
   "Add a marker meta-data to the result of calling conj on the given arguments.
-  Used in combinations trees to distinguishing sequences that are part of the
+  Used in combination trees to distinguishing sequences that are part of the
   tree structure from sequences that are node values."
   ([coll x]
     (with-tree-meta (conj coll x)))
@@ -162,17 +162,14 @@
                       (apply select-keys)))
                   (nil-or-dup? [x] (or (nil? x) (= ::dups x)))
                   (merge-trees [trees]
-                    ;(println "  merge" trees)
                     (if (every? nil-or-dup? trees)
                       (tree-list ::dups)
                       (walk-tree (with-tree-meta (apply concat trees)))))
                   (walk-tree [tree]
                     (when (tree-seq? tree)
                       (let [dups (dups tree)]
-                        ;(println "(walk-tree " tree "), dups=" dups)
                         (->> tree 
                           (reduce (fn [[walked-tree dups-seen :as r] branch]
-                                    ;(println "  reduce" r branch)
                                     (let [node (if (tree-seq? branch)
                                                  (first branch)
                                                  branch)
@@ -208,9 +205,9 @@
 
 (defn combinations-zip
   "Returns a clojure.zip zipper on a given combinations tree. Operates on the
-  result of combinations-tree or distinct-combinations-tree. However these trees
-  have no real root node, so for zipper to work a dummy nil root node is added
-  to the tree passed as argument."
+  result of combinations-tree or distinct-combinations-tree. Note that because
+  combination trees have no root node, a dummy nil root node is added to the
+  tree passed as argument so that a zipper can be built with it."
   [combinations-tree]
   (zip/zipper tree-seq?
               tree-rest
@@ -231,7 +228,6 @@
           z (when (seq tree) (combinations-zip tree))
           leaves (when z (filter filter-fn (take-while (complement zip/end?)
                                                       (iterate zip/next z))))]
-      ;(println "(tree->combinations" tree remove-dups? "), z=" z ", leaves=" leaves)
       (when z
         (seq (map #(->> %
                    (zip/path)
