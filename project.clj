@@ -8,7 +8,7 @@
                                   [org.clojure/tools.nrepl "0.2.5"]
                                   [org.clojure/math.combinatorics "0.0.9"]]
                  :plugins [[com.keminglabs/cljx "0.6.0" :exclusions [org.clojure/clojure]]
-                           [codox "0.8.8"]
+                           [codox "0.8.11"]
                            [lein-cljsbuild "1.0.5"]
                            [com.cemerick/clojurescript.test "0.3.1"]]
                  :cljx {:builds [{:source-paths ["src/cljx"]
