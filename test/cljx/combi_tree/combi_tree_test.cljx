@@ -14,6 +14,8 @@
 #+cljs
 (def Exception js/Error)
 
+; Note: fails with clojure.math.combinatorics v0.1.0 or above because their
+; combinations method now filters out duplicates like distinct-combinations
 (deftest test-combinations
   (let [cfns [combinations distinct-combinations unique-combinations]]
     (are [c n] (nil? (doseq [cfn cfns]
