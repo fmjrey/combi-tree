@@ -1,4 +1,4 @@
-(defproject combi-tree "0.1.0-SNAPSHOT"
+(defproject combi-tree "0.1.0"
   :description "Clojure(Script) library for generating combination trees and combinations of elements of a sequence."
   :url "https://github.com/fmjrey/combi-tree"
   :license {:name "Eclipse Public License"
