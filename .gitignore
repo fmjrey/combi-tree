@@ -11,3 +11,4 @@ pom.xml.asc
 .project
 .classpath
 .*.html
+/doc/

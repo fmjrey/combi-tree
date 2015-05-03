@@ -55,7 +55,7 @@
   [coll]
   (with-tree-meta (rest coll)))
 
-(def zero-combinations-tree
+(def ^:private zero-combinations-tree
   (sorted-map 0 empty-tree-list))
 
 (defn tree-conj
