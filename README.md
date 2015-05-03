@@ -5,18 +5,15 @@ building of a combination tree.
 
 [Link to the latest codox API docs](http://fmjrey.github.io/combi-tree).
 
-
-<!--- **NOTE: not yet relased to clojars, below not working yet**
 ## Releases and Dependency Information
 
-Latest stable release: 0.1.0
+Latest release: 0.1.0-SNAPSHOT
 
 [Leiningen](http://leiningen.org/) dependency information:
 
 ```clojure
-[combi-tree/combi-tree "0.1.0"]
+[combi-tree/combi-tree "0.1.0-SNAPSHOT"]
 ```
--->
 
 ## Overview
 
